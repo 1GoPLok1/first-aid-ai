@@ -1,0 +1,55 @@
+# Виртуальное окружение
+.venv/
+venv/
+ENV/
+env/
+
+# Файлы с секретами
+.env
+.env.local
+*.key
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Данные
+data/raw/*
+data/processed/*
+data/embeddings/*
+!data/embeddings/.gitkeep
+data/chunks/*
+*.pdf
+*.html
+*.csv
+
+# Ноутбуки (только код, не данные)
+.ipynb_checkpoints/
+*.ipynb
+!notebooks/  # но сами ноутбуки храним
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Логи
+*.log
+logs/
+
+# Временные файлы
+tmp/
+temp/
+downloads/
+
+# Конфигурации с ключами
+config.yaml
+credentials.json
+service-account.json
