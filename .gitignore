@@ -33,8 +33,6 @@ data/chunks/*
 !notebooks/  # но сами ноутбуки храним
 
 # IDE
-.vscode/
-.idea/
 *.swp
 *.swo
 *~
