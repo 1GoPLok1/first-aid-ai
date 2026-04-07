@@ -1,33 +1,49 @@
 import os
-from pathlib import Path
-import json
-from sentence_transformers import SentenceTransformer
+import glob
+import numpy as np
+from fastembed import FastEmbed
 
-def main():
-    # Пути и модель из config.py
-    processed_dir = Path(r'backend/data/processed')
-    embeddings_dir = Path(r'backend/data/embeddings')
+# Папки
+input_dir = r'data\processed'
+output_dir = r'data\embeddings'
 
-    # Создаем папку для эмбеддингов, если не существует
-    embeddings_dir.mkdir(parents=True, exist_ok=True)
+# Проверка директорий
+if not os.path.exists(input_dir):
+    print(f"[ОШИБКА] Папка с текстами '{input_dir}' не найдена.")
+    exit(1)
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+    print(f"[INFO] Папка для эмбеддингов '{output_dir}' создана.")
 
-    # Инициализация модели
-    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+# Инициализация эмбеддера
+print("[INFO] Инициализация FastEmbed...")
+embedder = FastEmbed()
 
-    # Обрабатываем все txt файлы
-    for file_path in processed_dir.glob('*.txt'):
-        with open(file_path, 'r', encoding='utf-8') as f:
-            texts = f.readlines()
+# Поиск файлов с текстами (например, .txt)
+text_files = glob.glob(os.path.join(input_dir, '*.txt'))
+if not text_files:
+    print(f"[ОШИБКА] Не найдено файлов .txt в '{input_dir}'")
+    exit(1)
 
-        # Создаем эмбеддинги
-        embeddings = model.encode(texts)
+print(f"[INFO] Найдено файлов: {len(text_files)}")
+for idx, file_path in enumerate(text_files, 1):
+    print(f"\n[ШАГ {idx}] Обработка файла: {os.path.basename(file_path)}")
+    
+    # Чтение текста
+    with open(file_path, encoding='utf-8') as f:
+        text = f.read()
+    print(f"[INFO] Длина текста: {len(text)} символов")
+    
+    # Получение эмбеддинга
+    embedding = embedder.encode([text])
+    embedding = np.array(embedding[0])  # Вытаскиваем из списка
 
-        # Название файла для сохранения
-        filename = file_path.stem + '_embeddings.json'
-        save_path = embeddings_dir / filename
+    # Имя файла для эмбеддинга (например, example.txt → example.npy)
+    emb_filename = os.path.splitext(os.path.basename(file_path))[0] + '.npy'
+    emb_path = os.path.join(output_dir, emb_filename)
 
-        # Сохраняем как JSON
-        with open(save_path, 'w', encoding='utf-8') as f:
-            json.dump(embeddings.tolist(), f)
+    # Сохранение эмбеддинга
+    np.save(emb_path, embedding)
+    print(f"[INFO] Эмбеддинг сохранён: {emb_path}")
 
-        print(f'Эмбеддинги для {file_path.name} сохранены в {save_path}')
+print("\n[УСПЕХ] Все эмбеддинги созданы и сохранены!")
