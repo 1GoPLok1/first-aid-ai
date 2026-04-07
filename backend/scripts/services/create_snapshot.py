@@ -1,5 +1,5 @@
 import requests
-import config
+import backend.scripts.config as config
 
 response = requests.post(
     f"http://{config.QDRANT_HOST}:{config.QDRANT_PORT}/collections/{config.COLLECTION_NAME}/snapshots"

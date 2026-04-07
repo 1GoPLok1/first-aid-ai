@@ -1,5 +1,5 @@
 import requests
-import config
+import backend.scripts.config as config
 import os
 
 snapshot_path = "C:\\backups\\qdrant\\qdrant_snapshot_20240317_020000.tar.gz"

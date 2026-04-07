@@ -1,6 +1,6 @@
 from qdrant_client import QdrantClient
 from qdrant_client.http.models import Filter, FieldCondition, MatchValue
-import config
+import backend.scripts.config as config
 
 client = QdrantClient(host=config.QDRANT_HOST, port=config.QDRANT_PORT)
 
