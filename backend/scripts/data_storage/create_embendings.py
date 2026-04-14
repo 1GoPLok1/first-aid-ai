@@ -4,8 +4,8 @@ import numpy as np
 from fastembed import FastEmbed
 
 # Папки
-input_dir = r'data\processed'
-output_dir = r'data\embeddings'
+input_dir = r'backend/data/processed'
+output_dir = r'backend/data/embeddings'
 
 # Проверка директорий
 if not os.path.exists(input_dir):
