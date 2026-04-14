@@ -5,7 +5,6 @@
   --footer-bg: #333;
   --menu-bg: #f0f0f0;
   --menu-hover: #ddd;
-  
 }
 
 .dark-theme {
@@ -18,23 +17,25 @@
 }
 
 .main {
-  background-color: var(--bg-color);
-  font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  justify-content: center;
+  height: 100vh; /* полная высота окна */
+  background-color: var(--bg-color);
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
 }
-/* Хедер с бургером */
+
+/* Навигация (хедер) — в верхней части */
 .header {
   padding: 10px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: var(--header-bg);
+  position: relative;
 }
+
 /* Иконка гамбургера */
 .menu-toggle {
   width: 30px;
@@ -44,34 +45,30 @@
   justify-content: space-between;
   cursor: pointer;
 }
-.bar {
-  height: 4px;
-  background-color: #fff;
-  width: 100%;
-  border-radius: 2px;
-}
+
 /* Меню (выезжающее) */
 .menu-panel {
   position: absolute;
   top: 50px;
   left: 0;
   right: 0;
-  background-color: #f0f0f0;
+  background-color: var(--menu-bg);
   display: none;
   flex-direction: column;
   padding: 10px 0;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   z-index: 1000;
 }
+
 /* Пункты меню */
 .menu-item {
   padding: 12px 20px;
   cursor: pointer;
-  user-select: none;
 }
 .menu-item:hover {
-  background-color: #ddd;
+  background-color: var(--menu-hover);
 }
+
 /* Подсписок настроек */
 .settings-list {
   display: none;
@@ -81,28 +78,29 @@
 }
 .setting-item {
   padding: 10px 20px;
-  cursor: pointer;
 }
 .setting-item:hover {
   background-color: #ccc;
 }
-/* Основной контент */
+
+/* Основной контент — по центру экрана */
 .content {
-  height: 80%;
+  flex: 1; /* занимает всё свободное пространство */
+  display: flex;
+  align-items: center; /* по вертикали */
+  justify-content: center; /* по горизонтали */
   padding: 20px;
 }
-/* Подвал */
+
+/* Подвал — внизу */
 .footer {
-  background-color: #333;
+  background-color: var(--footer-bg);
   color: white;
   padding: 10px;
   text-align: center;
-  margin-top: 40px;
 }
 
-/**----------------------------**/
-
-/* Красная круглая кнопка */
+/* Кнопка по центру, внутри content, либо можно оставить так */
 .red-button {
   width: 150px;
   height: 150px;
@@ -126,7 +124,6 @@
   height: 60px;
 }
 
-/* Вертикальная палка */
 .cross:before,
 .cross:after {
   content: "";
@@ -144,6 +141,7 @@
   transform: translate(-50%, -50%);
 }
 
+/* Вертикальная палка */
 .cross:after {
   width: 12px;
   height: 100%;
