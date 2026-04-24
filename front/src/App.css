@@ -1,0 +1,144 @@
+:root {
+  /* Основные переменные темы */
+  --color-primary: #007bff; /* Цвет кнопок и ссылок */
+  --color-secondary: #6c757d; /* Второстепенный цвет, например для текста */
+  --color-background: #f2f2f2; /* Цвет фона */
+  --color-navbar: #333; /* Цвет навбар */
+  --color-footer: #f2f2f2; /* Цвет подвала */
+  --color-input-border: #ccc; /* Цвет границы у поля ввода */
+  --color-input-focus: #007bff; /* Цвет границы при фокусе */
+  
+  /* Размеры и шрифты */
+  --font-family: 'Arial, sans-serif'; /* Основной шрифт */
+  --font-size: 16px; /* Размер шрифта для текста */
+  --border-radius: 4px; /* Радиус скругления элементов */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Полная высота окна браузера */
+  font-family: var(--font-family);
+}
+
+/* Навигация */
+.navbar {
+  background-color: var(--color-navbar);
+  padding: 10px;
+  position: relative; /* Для позиционирования выпадающего меню */
+}
+
+/* Кнопка меню */
+.menu-button {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Выпадающее меню */
+.dropdown-menu {
+  position: absolute;
+  top: 40px; /* Расположение под кнопкой */
+  left: 10px;
+  background-color: #fff; /* Цвет фона для меню */
+  border: 1px solid #ccc; /* Рамка */
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  padding: 10px 0;
+}
+
+.dropdown-menu ul {
+  list-style: none; /* Удаление маркеров списка */
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu li {
+  padding: 5px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu li:hover {
+  background-color: #f8f9fa;
+}
+
+/* Основной контейнер для контента */
+.container {
+  flex: 1; /* Занимает всё доступное пространство */
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Контейнер для чата */
+.chat-container {
+  width: 100%;
+  max-width: 600px; /* Максимальная ширина */
+}
+
+/* Область для сообщений */
+.chat-box {
+  display: flex; /* В одну строку */
+  margin-bottom: 10px;
+}
+
+/* Поле ввода сообщения */
+.chat-input {
+  flex: 1; /* Занимает всё место */
+  padding: 10px;
+  font-size: var(--font-size);
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--border-radius);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.chat-input:focus {
+  border-color: var(--color-input-focus);
+}
+
+/* Кнопка отправки */
+.send-button {
+  padding: 10px 20px;
+  margin-left: 10px;
+  font-size: var(--font-size);
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  transition: background-color 0.2s;
+}
+
+.send-button:hover {
+  background-color: darken(var(--color-primary), 10%);
+}
+
+/* Подвал сайта */
+.footer {
+  background-color: var(--color-background);
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* Ссылки соцсетей и автор */
+.social-info p {
+  margin: 5px 0;
+}
+
+.social-info a {
+  margin-left: 8px;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+
+.social-info a:hover {
+  text-decoration: underline;
+}
