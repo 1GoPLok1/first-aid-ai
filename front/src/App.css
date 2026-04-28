@@ -1,17 +1,27 @@
 :root {
   /* Основные переменные темы */
-  --color-primary: #007bff; /* Цвет кнопок и ссылок */
-  --color-secondary: #6c757d; /* Второстепенный цвет, например для текста */
-  --color-background: #f2f2f2; /* Цвет фона */
-  --color-navbar: #333; /* Цвет навбар */
-  --color-footer: #f2f2f2; /* Цвет подвала */
-  --color-input-border: #ccc; /* Цвет границы у поля ввода */
-  --color-input-focus: #007bff; /* Цвет границы при фокусе */
+  --color-primary: #706B68;        /* более тёплый оттенок для кнопок и ссылок */
+  --color-secondary: #490206;      /* более насыщенный для второстепенных элементов */
+  --color-background: #C0B5B3;     /* светлый фон */
+  --color-navbar: #100E11;          /* темный, чтобы контрастировать с фоном */
+  --color-footer: #f2f2f2;          /* светлый подвал, как у вас */
+  --color-input-border: #ccc;       /* стандартная граница */
+  --color-input-focus: #706B68;      /* для фокусировки на полях ввода */
   
   /* Размеры и шрифты */
   --font-family: 'Arial, sans-serif'; /* Основной шрифт */
   --font-size: 16px; /* Размер шрифта для текста */
   --border-radius: 4px; /* Радиус скругления элементов */
+}
+
+[data-theme = 'dark'] {
+  --color-primary: #C0B5B3;        /* светлый оттенок, контрастирующий с тёмным фоном */
+  --color-secondary: #2C0001;      /* насыщенный, тёмный для деталей */
+  --color-background: #100E11;     /* почти черный */
+  --color-navbar: #706B68;          /* этот цвет подходит для навбара в тёмной теме */
+  --color-footer: #2C0001;           /* тёмный, чтобы гармонировать с фоном */
+  --color-input-border: #490206;    /* тёмная граница */
+  --color-input-focus: #C0B5B3;     /* чтобы выделять активные поля */
 }
 
 .App {
@@ -21,15 +31,210 @@
   font-family: var(--font-family);
 }
 
-/* Навигация */
-.navbar {
-  background-color: var(--color-navbar);
-  padding: 10px;
-  position: relative; /* Для позиционирования выпадающего меню */
+.switch {
+  position: fixed;
+  display: inline-block;
+  width: 3.7em;
+  height: 2.1em;
+  margin: 1em;
+  right: 0;
 }
 
-/* Кнопка меню */
-.menu-button {
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Весь контейнер */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  background-color: var(--color-background);
+}
+
+/* Центрированный блок */
+.center-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Кнопка с крестом (например, для меню или другого) */
+.cross-button {
+  width: 8em;
+  height: 8em;
+  border-radius: 50%;
+  background-color: #d9534f; /* Можно оставить или сделать переменной */
+  border: none;
+  margin-bottom: 20px;
+  background-image: url("medic.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cross-button:hover {
+  background-color: #c9302c; /* темнее при наведении */
+}
+
+.cross-button.recording {
+  background: #c9443f;
+  animation: pulse 1.5s infinite cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cross-button.recording::after {
+  animation: ripple 1.5s infinite cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Кнопка чата */
+.chat-button {
+  font-size: 30px;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  background-color: var(--color-navbar);
+  transition: background-color 0.3s;
+}
+
+.chat-button:hover {
+  background-color: darken(var(--color-primary), 10%);
+}
+
+/* Окно чата */
+.chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.chat-box {
+  position: relative;
+  width: 80%;
+  max-width: 95%;
+  height: 10%;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+}
+
+.close-chat {
+  position: absolute;
+  top: 1%;
+  right: 1%;
+  border: none;
+  background: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #000;
+}
+
+/* Ввод и отправка */
+.chat-footer {
+  display: flex;
+}
+.chat-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-input-border);
+  outline: none;
+  transition: border-color 0.3s;
+}
+.chat-input:focus {
+  border-color: var(--color-input-focus);
+}
+
+.send-button {
+  margin-left: 10px;
+  padding: 8px 12px;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.send-button:hover {
+  background-color: darken(var(--color-primary), 10%);
+}
+
+/* Нижний навбар */
+.bottom-navbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--color-navbar);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+}
+
+/* Навигационные кнопки */
+.nav-button {
   background: none;
   border: none;
   color: #fff;
@@ -37,108 +242,38 @@
   cursor: pointer;
 }
 
-/* Выпадающее меню */
-.dropdown-menu {
-  position: absolute;
-  top: 40px; /* Расположение под кнопкой */
-  left: 10px;
-  background-color: #fff; /* Цвет фона для меню */
-  border: 1px solid #ccc; /* Рамка */
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  z-index: 1000;
-  padding: 10px 0;
-}
-
-.dropdown-menu ul {
-  list-style: none; /* Удаление маркеров списка */
-  margin: 0;
-  padding: 0;
-}
-
-.dropdown-menu li {
-  padding: 5px 20px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.dropdown-menu li:hover {
-  background-color: #f8f9fa;
-}
-
-/* Основной контейнер для контента */
-.container {
-  flex: 1; /* Занимает всё доступное пространство */
+/* Боковое меню */
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #fff; /* Можно сделать переменной для светлой/тёмной темы, если нужно */
+  box-shadow: -2px 0 8px rgba(0,0,0,0.2);
   padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 1100;
 }
-
-/* Контейнер для чата */
-.chat-container {
-  width: 100%;
-  max-width: 600px; /* Максимальная ширина */
-}
-
-/* Область для сообщений */
-.chat-box {
-  display: flex; /* В одну строку */
-  margin-bottom: 10px;
-}
-
-/* Поле ввода сообщения */
-.chat-input {
-  flex: 1; /* Занимает всё место */
-  padding: 10px;
-  font-size: var(--font-size);
-  border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius);
-  outline: none;
-  transition: border-color 0.2s;
-}
-
-.chat-input:focus {
-  border-color: var(--color-input-focus);
-}
-
-/* Кнопка отправки */
-.send-button {
-  padding: 10px 20px;
-  margin-left: 10px;
-  font-size: var(--font-size);
-  cursor: pointer;
-  background-color: var(--color-primary);
-  color: #fff;
+.menu-close-btn {
+  align-self: flex-start;
+  font-size: 24px;
   border: none;
-  border-radius: var(--border-radius);
-  transition: background-color 0.2s;
+  background: none;
+  cursor: pointer;
+}
+.menu-content {
+  margin-top: 20px;
 }
 
-.send-button:hover {
-  background-color: darken(var(--color-primary), 10%);
+@keyframes pulse {
+  0%, 100% { transform: scale(1);}
+  50% { transform: scale(1.2);}
 }
 
-/* Подвал сайта */
-.footer {
-  background-color: var(--color-background);
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-/* Ссылки соцсетей и автор */
-.social-info p {
-  margin: 5px 0;
-}
-
-.social-info a {
-  margin-left: 8px;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: text-decoration 0.2s;
-}
-
-.social-info a:hover {
-  text-decoration: underline;
+@keyframes ripple {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
 }

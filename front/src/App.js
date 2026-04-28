@@ -1,47 +1,119 @@
-import logo from './logo.svg';
 import './App.css';
+import { useCallback, useState } from 'react';
 
 function App() {
 
+  const [isRecording, setIsRecording] = useState(false);
+  const [isChatOpen, setChatOpen] = useState(false);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [theme, setTheme] = useState('light');
+
+  const [error, setError] = useState(null);
+
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const startRecording = useCallback(() => {setIsRecording(true)});
+
+  const stopRecording = useCallback(() => setIsRecording(false));
+
+  const handlePointerDown = (e) => {
+    e.preventDefault();
+    if (!isRecording) startRecording();
+  };
+
+  const handlePointerUp = (e) => {
+    e.preventDefault();
+    if (isRecording) stopRecording();
+  };
+
+  const handlePointerLeave = () => {
+    if (isRecording) stopRecording();
+  };
+
   return (
     <div className="App">
-      {/* Навигация */}
-      <div className="navbar">
-        <button className="menu-button">
-          меню ▼
-        </button>
-      </div>
+      
+      <div className="page-container" data-theme={theme}>
+        {/* Центрированный контейнер */}
+        <div className="center-container">
+          {/* Кнопка с крестом */}
+          <button
+            className={`cross-button ${isRecording ? 'recording' : ''}`}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerLeave={handlePointerLeave}
+            onPointerCancel={handlePointerUp}
+          />
 
-      {/* Основной контейнер */}
-      <div className="container">
-        <div className="chat-container">
-          
-          {/* Чат с вводом и кнопкой */}
-          <div className="chat-box">
-            <input
-              className="chat-input"
-              type="text"
-              placeholder="Введите сообщение..."
-            />
-            <button className="send-button">
-              Отправить
-            </button>
+          {/* Кнопка чата */}
+          <button
+            className="chat-button"
+            onClick={() => setChatOpen(!isChatOpen)}
+            aria-label="Открыть чат"
+          >
+            💬
+          </button>
+        </div>
+        
+        {/* Окно чата */}
+        {isChatOpen && (
+          <div className="chat-overlay">
+            <div className="chat-box">
+              {/* Кнопка закрытия */}
+              <button
+                className="close-chat"
+                onClick={() => setChatOpen(false)}
+                aria-label="Закрыть чат"
+              >
+                &times;
+              </button>
+              {/* Сообщения */}
+              <div className='messages'>Чат</div>
+              {/* Ввод и отправка */}
+              <div className="chat-footer">
+                <input
+                  type="text"
+                  placeholder="Введите сообщение..."
+                  className="chat-input"
+                />
+                <button className="send-button">Отправить</button>
+              </div>
+            </div>
           </div>
+        )}
 
+        {/* Навбар снизу */}
+        <div className="bottom-navbar">
+          <button
+            className="nav-button"
+            onClick={() => setMenuOpen(!isMenuOpen)}
+          >
+            📋
+          </button>
         </div>
-      </div>
 
-      {/* Подвал */}
-      <div className="footer">
-        <div className="social-info">
-          <p>
-            Следите за нами:{" "}
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>,
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>,
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-          </p>
-          <p>Автор: Иван Иванов</p>
-        </div>
+        {/* Боковое меню */}
+        {isMenuOpen && (
+          <div className="side-menu">
+            {/* Кнопка для переключения темы */}
+            <label className='switch'>
+              <input type="checkbox" onClick={toggleTheme}></input>
+              <span class="slider"></span>
+            </label>
+            <button
+              className="menu-close-btn"
+              onClick={() => setMenuOpen(!isMenuOpen)}
+            >
+              &times;
+            </button>
+            <div className="menu-content">
+              <p>Здесь меню</p>
+            </div>
+          </div>
+          )}
       </div>
     </div>
   );
