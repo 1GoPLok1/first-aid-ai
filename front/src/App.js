@@ -33,6 +33,22 @@ function App() {
     if (isRecording) stopRecording();
   };
 
+  const sendData = () => {
+    const formData = new FormData();
+    if (text) {
+      formData.append('text', text);
+    }
+
+    fetch('https://localhost:3000/process', {
+      method: 'POST',
+      body: formData,
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert('Answer:' + data.message);
+    })
+  }
+
   return (
     <div className="App">
       
@@ -78,8 +94,9 @@ function App() {
                   type="text"
                   placeholder="Введите сообщение..."
                   className="chat-input"
+                  onChange={(e) => setText(e.target.value)}
                 />
-                <button className="send-button">Отправить</button>
+                <button className="send-button" onClick={sendData}>Отправить</button>
               </div>
             </div>
           </div>
