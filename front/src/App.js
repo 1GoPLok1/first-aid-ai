@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 
 function App() {
 
+  const [text, setText] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isChatOpen, setChatOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -96,7 +97,7 @@ function App() {
                   className="chat-input"
                   onChange={(e) => setText(e.target.value)}
                 />
-                <button className="send-button" onClick={sendData}>Отправить</button>
+                <button className="send-button" onClick={sendData()}>Отправить</button>
               </div>
             </div>
           </div>
