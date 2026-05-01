@@ -8,32 +8,40 @@ function App() {
   const [isChatOpen, setChatOpen] = useState(false);
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState('light');
-
   const [error, setError] = useState(null);
 
-
+  //Theme
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const startRecording = useCallback(() => {setIsRecording(true)});
+  //Recording
+  const startRecording = useCallback(() => {
 
-  const stopRecording = useCallback(() => setIsRecording(false));
+    setIsRecording(true)
 
+    
+  });
+
+  const stopRecording = useCallback(() => {
+
+    setIsRecording(false)
+  });
+
+  //Handles 
   const handlePointerDown = (e) => {
     e.preventDefault();
     if (!isRecording) startRecording();
   };
-
   const handlePointerUp = (e) => {
     e.preventDefault();
     if (isRecording) stopRecording();
   };
-
   const handlePointerLeave = () => {
     if (isRecording) stopRecording();
   };
 
+  //Data
   const sendData = () => {
     const formData = new FormData();
     if (text) {
@@ -50,6 +58,7 @@ function App() {
     })
   }
 
+  //UI
   return (
     <div className="App">
       
