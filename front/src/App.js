@@ -75,19 +75,17 @@ function App() {
           />
 
           {/* Кнопка чата */}
-          <button
+          {!isChatOpen && (
+            <button
             className="chat-button"
             onClick={() => setChatOpen(!isChatOpen)}
             aria-label="Открыть чат"
-          >
+            >
             💬
-          </button>
-        </div>
-        
-        {/* Окно чата */}
-        {isChatOpen && (
-          <div className="chat-overlay">
-            <div className="chat-box">
+            </button>
+          )}
+          {isChatOpen && (
+          <div className="chat-box">
               {/* Кнопка закрытия */}
               <button
                 className="close-chat"
@@ -109,8 +107,11 @@ function App() {
                 <button className="send-button" onClick={sendData()}>Отправить</button>
               </div>
             </div>
-          </div>
         )}
+        </div>
+        
+        {/* Окно чата */}
+        
 
         {/* Навбар снизу */}
         <div className="bottom-navbar">
