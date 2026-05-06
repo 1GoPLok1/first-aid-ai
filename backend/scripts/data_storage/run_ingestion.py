@@ -67,26 +67,27 @@ class PipelineConfig:
     processed_dir: str = "data/processed"
     chunks_dir: str = "data/chunks"
     embeddings_dir: str = "data/embeddings"
-    vector_store_path: str = "data/vector_store"
+    vector_store_path: str = "data/vector_store"  # для локального кэша, если нужно
     
     # Обработка файлов
     supported_extensions: List[str] = field(default_factory=lambda: ['.pdf', '.txt', '.md', '.html'])
     max_file_size_mb: int = 50
     encoding: str = 'utf-8'
     
-    # Чанкинг (должны соответствовать настройкам вашего AdaptiveSemanticChunker)
+    # Чанкинг
     chunk_size: int = 800
     chunk_overlap: int = 150
     min_chunk_chars: int = 100
     
-    # Эмбеддинги
-    embedding_model: str = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    # === ЭМБЕДДИНГИ ===
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"  # ✅ Обновлено
     embedding_batch_size: int = 32
-    embedding_device: str = "cpu"  # или "cuda"
+    embedding_device: str = "cpu"  # или "cuda" если есть GPU
     cache_embeddings: bool = True
+    save_embeddings_to_file: bool = True  # ✅ Сохранять векторы в файл
     
-    # Векторное хранилище
-    vector_store_type: str = "chromadb"  # chromadb, qdrant, memory
+    # === ВЕКТОРНОЕ ХРАНИЛИЩЕ ===
+    vector_store_type: str = "qdrant"  # ✅ Только Qdrant
     collection_name: str = "medical_rag"
     
     # Качество
@@ -99,25 +100,23 @@ class PipelineConfig:
     
     # Асинхронность
     max_concurrent_files: int = 4
+    use_async: bool = False
     
-    # Настройки Qdrant
+    # === QDRANT CLOUD CONFIG ===
     qdrant_config: Dict = field(default_factory=lambda: {
-        # Для локального запуска (по умолчанию)
-        # 'path': 'data/vector_store/qdrant_storage'
+        # ✅ ОБЯЗАТЕЛЬНО заполните эти поля перед запуском:
+        'url': 'https://YOUR-CLUSTER-ID.aws.cloud.qdrant.io',  # из Qdrant Cloud Console
+        'api_key': 'YOUR-API-KEY-HERE',                         # из Qdrant Cloud Console
         
-        # Для подключения к Qdrant Cloud:
-        'url': 'https://xxx-xxx.aws.cloud.qdrant.io',
-        'api_key': 'your-api-key',
-        
-        # Дополнительные параметры:
-        'timeout': 30,
-        'grpc_port': 6334,
-        'http_port': 6333,
+        # Опциональные настройки:
+        'timeout': 60,           # таймаут запросов (сек)
+        'grpc_port': 6334,       # для gRPC (быстрее)
+        'http_port': 6333,       # для HTTP API
+        'prefer_grpc': True,     # использовать gRPC если доступен
     })
 
     def to_dict(self) -> Dict:
         return {k: v for k, v in asdict(self).items() if not k.startswith('_')}
-
 
 # ==================== МЕТРИКИ ====================
 
@@ -183,15 +182,22 @@ class EmbeddingService:
             self.model = None
     
     def get_dimension(self) -> int:
-        """Возвращает размерность эмбеддинга (нужно для инициализации Qdrant)"""
-        # Размеры популярных мультиязычных моделей
+        """Возвращает размерность эмбеддинга"""
         model_dims = {
+            "all-MiniLM-L6-v2": 384,
+            "sentence-transformers/all-MiniLM-L6-v2": 384,  # ✅ с префиксом
             "paraphrase-multilingual-MiniLM-L12-v2": 384,
             "paraphrase-multilingual-mpnet-base-v2": 768,
             "intfloat/multilingual-e5-large": 1024,
             "sentence-transformers/laBSE": 768,
         }
-        return model_dims.get(self.config.embedding_model, 384)  # fallback
+        # Поддержка как с префиксом, так и без
+        model_key = self.config.embedding_model
+        if model_key in model_dims:
+            return model_dims[model_key]
+        # Пробуем без префикса
+        simple_key = model_key.split('/')[-1]
+        return model_dims.get(simple_key, 384)  # fallback на 384
 
     def _load_cache(self):
         """Загрузка кэша эмбеддингов"""
