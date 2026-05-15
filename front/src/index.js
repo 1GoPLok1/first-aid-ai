@@ -4,6 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import '@fontsource/montserrat/400.css';
+import '@fontsource/montserrat/500.css';
+import '@fontsource/montserrat/600.css';
+import '@fontsource/montserrat/700.css';
+
+import '@fontsource/montserrat-alternates/400.css';
+import '@fontsource/montserrat-alternates/500.css';
+import '@fontsource/montserrat-alternates/600.css';
+import '@fontsource/montserrat-alternates/700.css';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
