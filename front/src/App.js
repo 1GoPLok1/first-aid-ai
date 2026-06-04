@@ -9,6 +9,7 @@ import {
   SendOutlined, AudioOutlined, StopOutlined, FileTextOutlined
 } from '@ant-design/icons';
 import './App.css';
+import { ignore } from 'antd/es/theme/useToken';
 
 const { Text, Link } = Typography;
 const { TextArea } = Input;
