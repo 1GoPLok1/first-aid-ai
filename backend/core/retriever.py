@@ -32,13 +32,14 @@ class HybridRetriever:
 
         self.base_retriever = qdrant_service.get_hybrid_retriever(
             collection_name=collection_name,
-            top_k=20,
+            top_k=10,
         )
 
         self.multi_query_retriever = MultiQueryRetriever.from_llm(
             retriever=self.base_retriever,
             llm=llm,
             include_original=True,
+            num_queries=2,
         )
 
         self.reranker_model_name = reranker_model

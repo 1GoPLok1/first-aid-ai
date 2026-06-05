@@ -104,6 +104,26 @@ async def lifespan(app: FastAPI):
     ServiceRegistry.query_router = QueryRouter()
     logger.info("QueryRouter: загружен (классы: EMERGENCY, LIFESTYLE, OUT_OF_SCOPE, CHITCHAT)")
 
+    try:
+        import httpx
+        httpx.post(
+            f"{settings.OLLAMA_BASE_URL}/api/generate",
+            json={"model": settings.OLLAMA_MODEL, "keep_alive": "24h"},
+            timeout=5.0,
+        )
+        logger.info("LLM предзагружена в память")
+    except:
+        pass
+
+    # Предзагрузка эмбеддингов
+    _ = ServiceRegistry.qdrant_service.embeddings.embed_query("test")
+    logger.info("Эмбеддинги предзагружены")
+
+    # Предзагрузка реранкера
+    from langchain_community.cross_encoders import HuggingFaceCrossEncoder
+    _reranker = HuggingFaceCrossEncoder(model_name=settings.RERANKER_MODEL)
+    logger.info("Реранкер предзагружен")    
+
     logger.info("Конфигурация:")
     logger.info("  - LLM: %s [%s]", settings.OLLAMA_MODEL, settings.OLLAMA_BASE_URL)
     logger.info("  - Embedding: %s", settings.EMBEDDING_MODEL)

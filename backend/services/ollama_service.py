@@ -40,6 +40,7 @@ class OllamaService:
             num_predict=self.num_predict,
             num_ctx=self.num_ctx,
             streaming=streaming,
+            keep_alive="24h",
         )
         logger.info(
             "ChatOllama создан: model=%s, temperature=%.1f, streaming=%s",
