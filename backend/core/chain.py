@@ -1,11 +1,13 @@
+import os
+import sys
 import logging
 from typing import AsyncIterator, List
 
 from langchain.chains import ConversationalRetrievalChain
 from langchain.memory import ConversationBufferMemory
-from langchain.schema import Document
 
-from prompts.prompts import SYSTEM_PROMPTS, build_chat_prompt
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from prompts import SYSTEM_PROMPTS, build_chat_prompt
 
 logger = logging.getLogger(__name__)
 
@@ -31,19 +33,18 @@ class RAGChain:
         self.prompt = build_chat_prompt(system_prompt)
         self.chain = self._build_chain()
 
-        # Кэш для результатов последнего запроса
         self.last_result = None
 
         logger.info("RAGChain инициализирована: prompt_type=%s", prompt_type)
 
     def _build_chain(self) -> ConversationalRetrievalChain:
+        ret = self.retriever.base_retriever if hasattr(self.retriever, 'base_retriever') else self.retriever
+
         chain = ConversationalRetrievalChain.from_llm(
             llm=self.llm,
-            retriever=self.retriever,
+            retriever=ret,
             memory=self.memory,
-            combine_docs_chain_kwargs={
-                "prompt": self.prompt,
-            },
+            combine_docs_chain_kwargs={"prompt": self.prompt},
             return_source_documents=True,
             verbose=False,
         )
@@ -90,7 +91,6 @@ class RAGChain:
         return sources
 
     def reset_memory(self) -> None:
-        """Очищает память диалога."""
         self.memory.clear()
         logger.info("Память диалога очищена")
 

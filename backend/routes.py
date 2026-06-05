@@ -1,6 +1,11 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import json
 import logging
 from typing import AsyncIterator
+from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import StreamingResponse
@@ -9,7 +14,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 
 from config import settings
-from schemas.schemas import (
+from schemas import (
     ChatRequest,
     SessionResponse,
     HealthResponse,
@@ -195,6 +200,14 @@ async def chat_stream(
             "X-Session-Id": session_id,
         },
     )
+
+@router.get(
+    "/sessions",
+    summary="Получение списка сессий",
+)
+async def list_sessions(redis_service=Depends(get_redis_service)):
+    sessions = await redis_service.list_sessions()
+    return sessions
 
 @router.post(
     "/sessions",

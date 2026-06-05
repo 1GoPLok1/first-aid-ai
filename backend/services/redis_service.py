@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class RedisSessionService:
+    """Reddis"""
     def __init__(
         self,
         redis_url: str = "redis://localhost:6379/0",
@@ -122,6 +123,23 @@ class RedisSessionService:
         else:
             logger.warning("Сессия не найдена для удаления: %s", session_id)
             return False
+
+    async def list_sessions(self) -> list:
+        """Возвращает список всех сессий."""
+        client = await self._get_client()
+        keys = await client.keys("session:*")
+        sessions = []
+        for key in keys:
+            data = await client.get(key)
+            if data:
+                session = json.loads(data)
+                session_id = key.replace("session:", "")
+                sessions.append({
+                    "session_id": session_id,
+                    "created_at": session.get("created_at", ""),
+                    "message_count": len(session.get("messages", [])),
+                })
+        return sessions
 
     async def session_exists(self, session_id: str) -> bool:
         client = await self._get_client()

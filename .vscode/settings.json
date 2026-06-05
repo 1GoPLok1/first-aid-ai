@@ -5,13 +5,17 @@
     "python.linting.flake8Enabled": true,
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
-    "editor.rulers": [88],
+    "editor.rulers": [
+        88
+    ],
     "files.associations": {
         "*.env": "properties"
     },
+    "explorer.sortOrder": "type",
     "[python]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": "explicit"
         }
-    }
+    },
+    "python-envs.defaultEnvManager": "ms-python.python:system"
 }

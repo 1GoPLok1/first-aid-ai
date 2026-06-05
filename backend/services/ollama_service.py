@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class OllamaService:
+    """Сервис Ollama"""
     def __init__(
         self,
         base_url: str = "http://localhost:11434",

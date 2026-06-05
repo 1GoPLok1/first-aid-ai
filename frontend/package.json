@@ -2,6 +2,7 @@
   "name": "front",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "@ant-design/icons": "^5.5.0",
     "@fontsource/montserrat": "^5.2.8",

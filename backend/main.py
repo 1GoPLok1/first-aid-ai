@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
 import logging
 import sys
 from contextlib import asynccontextmanager
@@ -20,7 +24,7 @@ from services.redis_service import RedisSessionService
 from core.router import QueryRouter
 
 # Роутер и реестр
-from api.routes import router, limiter, ServiceRegistry
+from routes import router, limiter, ServiceRegistry
 
 def setup_logging() -> None:
     """Настраивает структурированное логирование в JSON-формате."""

@@ -89,6 +89,53 @@ class Settings(BaseSettings):
         description="Время жизни сессии в секундах (30 минут)",
     )
 
+    RATE_LIMIT_REQUESTS: PositiveInt = Field(
+        default=30,
+        description="Лимит запросов в минуту с одного IP",
+    )
+
+    LLM_TEMPERATURE: float = Field(
+        default=0.1,
+        ge=0.0,
+        le=1.0,
+        description="Температура генерации",
+    )
+    LLM_TOP_P: float = Field(
+        default=0.3,
+        ge=0.0,
+        le=1.0,
+        description="Top-p sampling",
+    )
+    LLM_MAX_TOKENS: PositiveInt = Field(
+        default=1024,
+        description="Максимум токенов в ответе",
+    )
+    LLM_NUM_CTX: PositiveInt = Field(
+        default=4096,
+        description="Размер контекстного окна",
+    )
+    LLM_TIMEOUT: PositiveInt = Field(
+        default=10,
+        description="Тайм-аут ответа LLM в секундах",
+    )
+
+    RETRIEVAL_TOP_K: PositiveInt = Field(
+        default=3,
+        description="Чанков в промпте после реранкинга",
+    )
+    RETRIEVAL_DENSE_TOP_K: PositiveInt = Field(
+        default=20,
+        description="Кандидатов от dense-поиска",
+    )
+    RETRIEVAL_SPARSE_TOP_K: PositiveInt = Field(
+        default=20,
+        description="Кандидатов от sparse-поиска",
+    )
+    RETRIEVAL_RRF_TOP_M: PositiveInt = Field(
+        default=10,
+        description="Кандидатов после RRF-слияния",
+    )
+
     @property
     def qdrant_kwargs(self) -> dict:
         """Параметры для инициализации QdrantClient."""

@@ -5,10 +5,17 @@ pydantic>=2.0.0,<3.0.0
 pydantic-settings>=2.0.0,<3.0.0
 python-dotenv>=1.0.0,<2.0.0
 
+
 # LangChain и RAG
-langchain>=0.3.0,<1.0.0
-langchain-community>=0.3.0,<1.0.0
-langchain-qdrant>=0.2.0,<1.0.0
+langchain>=0.3.13,<1.0.0
+langchain-community>=0.3.13,<1.0.0
+langchain-qdrant>=0.2.1,<1.0.0
+langchain-text-splitters>=0.3.0,<1.0.0
+
+# LlamaIndex (для чанкинга и индексации)
+llama-index-core>=0.12.0
+llama-index-embeddings-huggingface>=0.3.0
+llama-index-vector-stores-qdrant>=0.3.0
 
 # Qdrant
 qdrant-client>=1.12.0,<2.0.0
@@ -17,6 +24,7 @@ qdrant-client>=1.12.0,<2.0.0
 sentence-transformers>=2.7.0,<3.0.0
 torch>=2.0.0
 transformers>=4.40.0
+tokenizers>=0.19.0
 
 # Ollama
 httpx>=0.27.0,<1.0.0
@@ -24,8 +32,18 @@ httpx>=0.27.0,<1.0.0
 # Redis
 redis>=5.0.0,<6.0.0
 
-# MinIO
+# MinIO и S3
 boto3>=1.34.0,<2.0.0
+
+# PDF парсинг
+pymupdf>=1.24.0
+pymupdf4llm>=0.0.5
+pdfplumber>=0.10.0
+
+# OCR
+pytesseract>=0.3.10
+pdf2image>=1.17.0
+Pillow>=10.0.0
 
 # Rate limiting
 slowapi>=0.1.9,<1.0.0
@@ -35,3 +53,4 @@ structlog>=24.0.0,<25.0.0
 
 # Дополнительно
 aiofiles>=23.0.0
+tiktoken>=0.5.0
